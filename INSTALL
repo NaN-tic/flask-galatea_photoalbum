@@ -1,0 +1,23 @@
+Installing flask-galatea_photoalbum
+=============================
+
+Prerequisites
+-------------
+
+ * Python 2.7 or later (http://www.python.org/)
+ * trytond (http://www.tryton.org/)
+ * trytond-galatea
+ * trytond-galatea_photoalbum
+ * flask-mail
+ * slug
+
+Installation
+------------
+
+Once you've downloaded and unpacked the flask-galatea-cms source release,
+copy galatea-cms directory in main flask app and rename to cms.
+
+Edit your App flask and register a new blueprint:
+
+from cms import cms
+app.register_blueprint(cms, url_prefix='/<lang>')
