@@ -158,9 +158,11 @@ def new(lang):
 
     if not website.photoalbum_new:
         flash(_('Not available to new images.'), 'danger')
-    elif not website.photoalbum_new_anonymous and not session['user']:
+        return redirect(url_for('.photos', lang=g.language))
+    elif not website.photoalbum_new_anonymous and not session.get('user'):
         flash(_('Not available to publish new images and anonymous users.' \
             ' Please, login in'), 'danger')
+        return redirect(url_for('galatea.login', lang=g.language))
 
     form = PhotoForm()
     if form.validate_on_submit():
@@ -245,7 +247,7 @@ def comment(lang):
 
     if not website.photoalbum_comment:
         flash(_('Not available to publish comments.'), 'danger')
-    elif not website.photoalbum_anonymous and not session['user']:
+    elif not website.photoalbum_anonymous and not session.get('user'):
         flash(_('Not available to publish comments and anonymous users.' \
             ' Please, login in'), 'danger')
     elif not comment or not photo:
