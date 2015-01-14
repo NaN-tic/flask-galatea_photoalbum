@@ -183,8 +183,7 @@ def new(lang):
                 )
         except:
             p.file_name = 'unknown.jpg'
-        print form.photo.data.filename
-        print p.file_name
+
         p.user = session['user'] if session.get('user') \
             else website.photoalbum_anonymous_user.id
         p.description = form.description.data or None
