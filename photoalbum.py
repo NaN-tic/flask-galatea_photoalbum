@@ -29,8 +29,6 @@ LIMIT = current_app.config.get('TRYTON_PAGINATION_PHOTOALBUM_LIMIT', 20)
 COMMENTS = current_app.config.get('TRYTON_PHOTOALBUM_COMMENTS', True)
 WHOOSH_MAX_LIMIT = current_app.config.get('WHOOSH_MAX_LIMIT', 500)
 
-PHOTO_FIELD_NAMES = ['photo_path', 'description', 'comment', 'total_comments',
-    'metakeywords', 'user', 'user.rec_name', 'photo_create_date']
 PHOTOALBUM_SCHEMA_PARSE_FIELDS = ['title', 'content']
 IMAGE_TYPES = ['image/jpeg', 'image/png',  'image/gif']
 
@@ -133,7 +131,7 @@ def search(lang):
         ]
     order = [('photo_create_date', 'DESC'), ('id', 'DESC')]
 
-    photos = PhotoalbumPhoto.search_read(domain, order=order, fields_names=PHOTO_FIELD_NAMES)
+    photos = PhotoalbumPhoto.search(domain, order=order)
 
     pagination = Pagination(page=page, total=total, per_page=LIMIT, display_msg=DISPLAY_MSG, bs_version='3')
 
@@ -240,7 +238,7 @@ def comment(lang):
         ('visibility', 'in', _visibility()),
         ('websites', 'in', [GALATEA_WEBSITE]),
         ]
-    photos = PhotoalbumPhoto.search_read(domain, limit=1, fields_names=PHOTO_FIELD_NAMES)
+    photos = PhotoalbumPhoto.search(domain, limit=1)
     if not photos:
         abort(404)
     photo, = photos
@@ -336,7 +334,7 @@ def key(lang, key):
     offset = (page-1)*LIMIT
 
     order = [('photo_create_date', 'DESC'), ('id', 'DESC')]
-    photos = PhotoalbumPhoto.search_read(domain, offset, LIMIT, order, PHOTO_FIELD_NAMES)
+    photos = PhotoalbumPhoto.search(domain, offset, LIMIT, order)
 
     pagination = Pagination(page=page, total=total, per_page=LIMIT, display_msg=DISPLAY_MSG, bs_version='3')
 
@@ -398,7 +396,7 @@ def users(lang, user):
         abort(404)
 
     order = [('photo_create_date', 'DESC'), ('id', 'DESC')]
-    photos = PhotoalbumPhoto.search_read(domain, offset, LIMIT, order, PHOTO_FIELD_NAMES)
+    photos = PhotoalbumPhoto.search(domain, offset, LIMIT, order)
 
     pagination = Pagination(page=page, total=total, per_page=LIMIT, display_msg=DISPLAY_MSG, bs_version='3')
 
@@ -444,7 +442,7 @@ def photos(lang):
     offset = (page-1)*LIMIT
 
     order = [('photo_create_date', 'DESC'), ('id', 'DESC')]
-    photos = PhotoalbumPhoto.search_read(domain, offset, LIMIT, order, PHOTO_FIELD_NAMES)
+    photos = PhotoalbumPhoto.search(domain, offset, LIMIT, order)
 
     pagination = Pagination(page=page, total=total, per_page=LIMIT, display_msg=DISPLAY_MSG, bs_version='3')
 
