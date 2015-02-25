@@ -272,7 +272,7 @@ def comment(lang):
 
     return redirect(url_for('.photo', lang=g.language, id=photo['id']))
 
-@photoalbum.route("/<id>", endpoint="photo")
+@photoalbum.route("/<int:id>", endpoint="photo")
 @tryton.transaction()
 def photo(lang, id):
     '''Photo Album Photo detail'''
