@@ -113,6 +113,16 @@ def search(lang):
     except ValueError:
         page = 1
 
+    # limit
+    if request.args.get('limit'):
+        try:
+            limit = int(request.args.get('limit'))
+            session['photoalbum_limit'] = limit
+        except:
+            limit = LIMIT
+    else:
+        limit = session.get('photoalbum_limit', LIMIT)
+
     # Search
     ix = index.open_dir(schema_dir)
     query = q.replace('+', ' AND ').replace('-', ' NOT ')
@@ -133,7 +143,7 @@ def search(lang):
 
     photos = PhotoalbumPhoto.search(domain, order=order)
 
-    pagination = Pagination(page=page, total=total, per_page=LIMIT, display_msg=DISPLAY_MSG, bs_version='3')
+    pagination = Pagination(page=page, total=total, per_page=limit, display_msg=DISPLAY_MSG, bs_version='3')
 
     return render_template('photoalbum-search.html',
             website=website,
@@ -324,6 +334,16 @@ def key(lang, key):
     except ValueError:
         page = 1
 
+    # limit
+    if request.args.get('limit'):
+        try:
+            limit = int(request.args.get('limit'))
+            session['photoalbum_limit'] = limit
+        except:
+            limit = LIMIT
+    else:
+        limit = session.get('photoalbum_limit', LIMIT)
+
     domain = [
         ('metakeywords', 'ilike', '%'+key+'%'),
         ('active', '=', True),
@@ -331,12 +351,12 @@ def key(lang, key):
         ('websites', 'in', [GALATEA_WEBSITE]),
         ]
     total = PhotoalbumPhoto.search_count(domain)
-    offset = (page-1)*LIMIT
+    offset = (page-1)*limit
 
     order = [('photo_create_date', 'DESC'), ('id', 'DESC')]
-    photos = PhotoalbumPhoto.search(domain, offset, LIMIT, order)
+    photos = PhotoalbumPhoto.search(domain, offset, limit, order)
 
-    pagination = Pagination(page=page, total=total, per_page=LIMIT, display_msg=DISPLAY_MSG, bs_version='3')
+    pagination = Pagination(page=page, total=total, per_page=limit, display_msg=DISPLAY_MSG, bs_version='3')
 
     #breadcumbs
     breadcrumbs = [{
@@ -383,6 +403,16 @@ def users(lang, user):
     except ValueError:
         page = 1
 
+    # limit
+    if request.args.get('limit'):
+        try:
+            limit = int(request.args.get('limit'))
+            session['photoalbum_limit'] = limit
+        except:
+            limit = LIMIT
+    else:
+        limit = session.get('photoalbum_limit', LIMIT)
+
     domain = [
         ('user', '=', user.id),
         ('active', '=', True),
@@ -396,9 +426,9 @@ def users(lang, user):
         abort(404)
 
     order = [('photo_create_date', 'DESC'), ('id', 'DESC')]
-    photos = PhotoalbumPhoto.search(domain, offset, LIMIT, order)
+    photos = PhotoalbumPhoto.search(domain, offset, limit, order)
 
-    pagination = Pagination(page=page, total=total, per_page=LIMIT, display_msg=DISPLAY_MSG, bs_version='3')
+    pagination = Pagination(page=page, total=total, per_page=limit, display_msg=DISPLAY_MSG, bs_version='3')
 
     #breadcumbs
     breadcrumbs = [{
@@ -433,18 +463,28 @@ def photos(lang):
     except ValueError:
         page = 1
 
+    # limit
+    if request.args.get('limit'):
+        try:
+            limit = int(request.args.get('limit'))
+            session['photoalbum_limit'] = limit
+        except:
+            limit = LIMIT
+    else:
+        limit = session.get('photoalbum_limit', LIMIT)
+
     domain = [
         ('active', '=', True),
         ('visibility', 'in', _visibility()),
         ('websites', 'in', [GALATEA_WEBSITE]),
         ]
     total = PhotoalbumPhoto.search_count(domain)
-    offset = (page-1)*LIMIT
+    offset = (page-1)*limit
 
     order = [('photo_create_date', 'DESC'), ('id', 'DESC')]
-    photos = PhotoalbumPhoto.search(domain, offset, LIMIT, order)
+    photos = PhotoalbumPhoto.search(domain, offset, limit, order)
 
-    pagination = Pagination(page=page, total=total, per_page=LIMIT, display_msg=DISPLAY_MSG, bs_version='3')
+    pagination = Pagination(page=page, total=total, per_page=limit, display_msg=DISPLAY_MSG, bs_version='3')
 
     #breadcumbs
     breadcrumbs = [{
